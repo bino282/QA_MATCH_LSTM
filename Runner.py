@@ -15,8 +15,8 @@ import json
 #enNLP = spacy.load("en")
 from tqdm import *
 from sklearn.metrics import accuracy_score
-from bert_serving.client import BertClient
-bc = BertClient()
+# from bert_serving.client import BertClient
+# bc = BertClient()
 
 tf.flags.DEFINE_string("dataset", "SemEval", "SemEval/QNLI")
 tf.flags.DEFINE_string("mode", "pretrained", "pretrained/tranfer")
@@ -199,15 +199,17 @@ def SNLI_test_step(sess, model, test_data):
 
 
 def SemEval_test_step(sess, model, test_data, call_back, debug=False):
-    q_test, s_test, q_char_batch, s_char_batch, ql_test, sl_test, y_test = test_data
+    q_test,q_test_embed, s_test,s_test_embed, q_char_batch, s_char_batch, ql_test, sl_test, y_test = test_data
     final_pred = []
     final_loss = []
     for i in range(0, len(y_test), FLAGS.batch_size):
         feed_dict = {
             model.queries : q_test[i:i+FLAGS.batch_size],
             model.queries_char: q_char_batch[i:i+FLAGS.batch_size],
+            model.queries_embed : q_test_embed[i:i+FLAGS.batch_size],
             #model.queries_length : ql_test[i:i+FLAGS.batch_size],
             model.hypothesis : s_test[i:i+FLAGS.batch_size],
+            model.hypothesis_embed : s_test_embed[i:i+FLAGS.batch_size],
             model.hypothesis_char : s_char_batch[i:i+FLAGS.batch_size],
             #model.hypothesis_length : sl_test[i:i+FLAGS.batch_size],
             model.y : y_test[i:i+FLAGS.batch_size],
