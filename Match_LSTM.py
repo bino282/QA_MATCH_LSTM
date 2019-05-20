@@ -252,12 +252,12 @@ class Decoder(object):
 
 class MatchLSTM(object):
 
-    def __init__(self, flags, vocab, char_vocab, word_embedding):
+    def __init__(self, flags, vocab, char_vocab):
         self.config = flags
         self.Ddim = [int(x) for x in self.config.Ddim.split()]
         self.vocab = vocab
         self.char_vocab = char_vocab
-        self.word_embedding = word_embedding
+        # self.word_embedding = word_embedding
         self._add_placeholder()
         
         self._add_embedding()

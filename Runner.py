@@ -236,14 +236,14 @@ if __name__ == "__main__":
     pickle.dump(char_vocab, open("char_vocab.pkl","wb"))
     json.dump(tf.app.flags.FLAGS.flag_values_dict(), open("config.json", "w"), indent=4)
     print("Load Glove")
-    emb = DataUtils.GloVe(FLAGS.embedding_path)
+    # emb = DataUtils.GloVe(FLAGS.embedding_path)
     gpu_options = tf.GPUOptions(allow_growth=True)
     session_conf = tf.ConfigProto(
         gpu_options=gpu_options,
         allow_soft_placement=FLAGS.allow_soft_placement,
         log_device_placement=FLAGS.log_device_placement)
     sess = tf.Session(config=session_conf) 
-    model = MatchLSTM(FLAGS, vocab, char_vocab, emb)
+    model = MatchLSTM(FLAGS, vocab, char_vocab)
     checkpoint_dir = os.path.abspath(os.path.join(FLAGS.out_dir, "checkpoints"))
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
