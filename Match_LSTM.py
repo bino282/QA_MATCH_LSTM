@@ -275,17 +275,21 @@ class MatchLSTM(object):
     def _add_placeholder(self):
         with tf.variable_scope("placeholder"):
             self.queries = tf.placeholder(
-                tf.float32, [None, self.config.pad_question,768], "queries")
+                tf.float32, [None, self.config.pad_question], "queries")
+            self.queries_embed = tf.placeholder(
+                tf.float32, [None, self.config.pad_question,768], "queries_embed")
             self.queries_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_question, self.config.char_pad], "queries")
-            self.queries_length = tf.placeholder(
-               tf.int32, [None], "queries_length")
+            # self.queries_length = tf.placeholder(
+            #    tf.int32, [None], "queries_length")
             self.hypothesis = tf.placeholder(
-                tf.float32, [None, self.config.pad_sentence,768], "hypothesis")
+                tf.float32, [None, self.config.pad_sentence], "hypothesis")
+            self.hypothesis_embed = tf.placeholder(
+                tf.float32, [None, self.config.pad_sentence,768], "hypothesis_embed")
             self.hypothesis_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_sentence, self.config.char_pad], "queries")
-            self.hypothesis_length = tf.placeholder(
-               tf.int32, [None], "hypothesis_length")
+            # self.hypothesis_length = tf.placeholder(
+            #    tf.int32, [None], "hypothesis_length")
             self.y = tf.placeholder(
                 tf.float32, [None], "labels")
             self.y_SNLI = tf.placeholder(
@@ -294,10 +298,10 @@ class MatchLSTM(object):
                 tf.int32, [None, 2], "labels_SNLI")
             self.dropout = tf.placeholder(
                 tf.float32, [], "dropout")
-            # self.queries_length = tf.cast(
-            #     tf.cast(self.queries, tf.bool), tf.int32)
-            # self.hypothesis_length = tf.cast(
-            #     tf.cast(self.hypothesis, tf.bool), tf.int32)
+            self.queries_length = tf.cast(
+                tf.cast(self.queries, tf.bool), tf.int32)
+            self.hypothesis_length = tf.cast(
+                tf.cast(self.hypothesis, tf.bool), tf.int32)
             self.queries_char_length = tf.reshape(tf.reduce_sum(
                 tf.cast(tf.cast(self.queries_char, tf.bool), tf.int32), -1), [-1])
             self.hypothesis_char_length = tf.reshape(tf.reduce_sum(
@@ -341,8 +345,8 @@ class MatchLSTM(object):
             #     embeddings, self.queries)
             # self.hypothesis_embedding = tf.nn.embedding_lookup(
             #     embeddings, self.hypothesis)
-            self.queries_embedding = self.queries
-            self.hypothesis_embedding = self.hypothesis
+            self.queries_embedding = self.queries_embed
+            self.hypothesis_embedding = self.hypothesis_embed
             
         self.queries_embedding = tf.concat([self.queries_embedding, cq_emb], axis=2)
         self.hypothesis_embedding = tf.concat([self.hypothesis_embedding, ch_emb], axis=2)

@@ -78,8 +78,8 @@ def load_data_from_file(dsfile):
     return (q, sents,q_l, s_l,  labels)
 
 
-def make_model_inputs(qi, si, qi_char, si_char, q_l, s_l, q, sents, y):
-    inp = {'qi': qi, 'si': si, 'qi_char':qi_char, 'si_char': si_char,
+def make_model_inputs(qi,qi_embed, si,si_embed, qi_char, si_char, q_l, s_l, q, sents, y):
+    inp = {'qi': qi,'qi_embed':qi_embed,'si': si,'si_embed':si_embed,'qi_char':qi_char, 'si_char': si_char,
            'q_l':q_l, 's_l':s_l, 'q':q, 'sents':sents, 'y':y} 
     
     return inp
@@ -100,14 +100,14 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     pad_question = FLAGS.pad_question
     char_pad = FLAGS.char_pad
     
-    # qi = vocab.vectorize(q, pad=pad_question)  
-    # si = vocab.vectorize(sents, pad=pad_sentence)
-    qi = q
-    si = sents
+    qi = vocab.vectorize(q, pad=pad_question)  
+    si = vocab.vectorize(sents, pad=pad_sentence)
+    qi_embed = q
+    si_embed = sents
     qi_char = char_vocab.vectorize(q, pad=char_pad, seq_pad=pad_question)
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
     
-    inp = make_model_inputs(qi, si, qi_char, si_char, q_l, s_l, q, sents, y)
+    inp = make_model_inputs(qi,qi_embed,si,si_embed,qi_char, si_char, q_l, s_l, q, sents, y)
     if iseval:
         return (inp, y)
     else:
@@ -249,9 +249,11 @@ if __name__ == "__main__":
         os.makedirs(checkpoint_dir)
     saver = tf.train.Saver(tf.global_variables(), max_to_keep=FLAGS.num_checkpoints)
     callback = DataUtils.AnsSelCB(inp_val['q'], inp_val['sents'], y_val, inp_val)
-    q_i_test = bc.encode([" ".join(t) for t in inp_val['qi']])
-    s_i_test = bc.encode([" ".join(t) for t in inp_val['si']])
-    test_data = [ q_i_test,
+    q_i_test = bc.encode([" ".join(t) for t in inp_val['qi_embed']])
+    s_i_test = bc.encode([" ".join(t) for t in inp_val['si_embed']])
+    test_data = [ inp_val['qi'],
+                    q_i_test,
+                inp_val['si'],
                   s_i_test,
                   inp_val['qi_char'],
                   inp_val['si_char'],
@@ -276,9 +278,11 @@ if __name__ == "__main__":
         t = tqdm(range(0, len(y_train), FLAGS.batch_size), desc='train loss: %.6f' %0.0, ncols=100)
         train_loss = []
         for i in t:
-            q_i = bc.encode([" ".join(t) for t in inp_tr['qi'][i:i+FLAGS.batch_size]])
-            s_i = bc.encode([" ".join(t) for t in inp_tr['si'][i:i+FLAGS.batch_size]])
-            data_batch = [ q_i,
+            q_i = bc.encode([" ".join(t) for t in inp_tr['qi_embed'][i:i+FLAGS.batch_size]])
+            s_i = bc.encode([" ".join(t) for t in inp_tr['si_embed'][i:i+FLAGS.batch_size]])
+            data_batch = [ inp_tr['qi'][i:i+FLAGS.batch_size],
+                            q_i,
+                            inp_tr['si'][i:i+FLAGS.batch_size],
                            s_i,
                            inp_tr['qi_char'][i:i+FLAGS.batch_size],
                            inp_tr['si_char'][i:i+FLAGS.batch_size],
