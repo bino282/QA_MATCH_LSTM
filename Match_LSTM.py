@@ -275,13 +275,13 @@ class MatchLSTM(object):
     def _add_placeholder(self):
         with tf.variable_scope("placeholder"):
             self.queries = tf.placeholder(
-                tf.int32, [None, self.config.pad_question], "queries")
+                tf.int32, [None, self.config.pad_question,300], "queries")
             self.queries_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_question, self.config.char_pad], "queries")
             # self.queries_length = tf.placeholder(
             #    tf.int32, [None], "queries_length")
             self.hypothesis = tf.placeholder(
-                tf.int32, [None, self.config.pad_sentence], "hypothesis")
+                tf.int32, [None, self.config.pad_sentence,300], "hypothesis")
             self.hypothesis_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_sentence, self.config.char_pad], "queries")
             # self.hypothesis_length = tf.placeholder(
@@ -331,16 +331,18 @@ class MatchLSTM(object):
             ch_emb = tf.reshape(
                 ch_emb, [-1, self.config.pad_sentence, 2 * self.config.char_embedding_dim])
         with tf.variable_scope("word_embeddings"):
-            init_emb = tf.constant(self.vocab.embmatrix(
-                self.word_embedding), dtype=tf.float32)
-            embeddings = tf.get_variable("word_embedding",
-                                         initializer=init_emb,
-                                         dtype=tf.float32)
+            # init_emb = tf.constant(self.vocab.embmatrix(
+            #     self.word_embedding), dtype=tf.float32)
+            # embeddings = tf.get_variable("word_embedding",
+            #                              initializer=init_emb,
+            #                              dtype=tf.float32)
             
-            self.queries_embedding = tf.nn.embedding_lookup(
-                embeddings, self.queries)
-            self.hypothesis_embedding = tf.nn.embedding_lookup(
-                embeddings, self.hypothesis)
+            # self.queries_embedding = tf.nn.embedding_lookup(
+            #     embeddings, self.queries)
+            # self.hypothesis_embedding = tf.nn.embedding_lookup(
+            #     embeddings, self.hypothesis)
+            self.queries_embedding = self.queries
+            self.hypothesis_embedding = self.hypothesis
             
         self.queries_embedding = tf.concat([self.queries_embedding, cq_emb], axis=2)
         self.hypothesis_embedding = tf.concat([self.hypothesis_embedding, ch_emb], axis=2)

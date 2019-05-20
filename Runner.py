@@ -15,7 +15,8 @@ import json
 #enNLP = spacy.load("en")
 from tqdm import *
 from sklearn.metrics import accuracy_score
-
+from bert_serving.client import BertClient
+bc = BertClient()
 
 tf.flags.DEFINE_string("dataset", "SemEval", "SemEval/QNLI")
 tf.flags.DEFINE_string("mode", "pretrained", "pretrained/tranfer")
@@ -59,7 +60,7 @@ def load_data_from_file(dsfile):
     q, q_l = [], [] # a set of questions
     sents, s_l = [], [] # a set of sentences
     labels = [] # a set of labels
-    with open(dsfile) as f:          
+    with open(dsfile,'r',encoding='utf-8') as f:          
         for l in f:
             label = l.strip().split("\t")[2]
             qtext = l.strip().split("\t")[0]
@@ -99,8 +100,12 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     pad_question = FLAGS.pad_question
     char_pad = FLAGS.char_pad
     
-    qi = vocab.vectorize(q, pad=pad_question)  
-    si = vocab.vectorize(sents, pad=pad_sentence)
+    # qi = vocab.vectorize(q, pad=pad_question)  
+    # si = vocab.vectorize(sents, pad=pad_sentence)
+    qi = bc.encode(q)
+    print(qi)
+    exit()
+    si = bc.encode(sents)
     qi_char = char_vocab.vectorize(q, pad=char_pad, seq_pad=pad_question)
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
     
