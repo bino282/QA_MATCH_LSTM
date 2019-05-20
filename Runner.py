@@ -102,11 +102,8 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     
     # qi = vocab.vectorize(q, pad=pad_question)  
     # si = vocab.vectorize(sents, pad=pad_sentence)
-    print(q)
-    q_str = [" ".join(t) for t in q]
-    qi = q_str
-    sents_str = [" ".join(t) for t in sents]
-    si = sents_str
+    qi = q
+    si = sents
     qi_char = char_vocab.vectorize(q, pad=char_pad, seq_pad=pad_question)
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
     
