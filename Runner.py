@@ -21,7 +21,7 @@ bc = BertClient()
 tf.flags.DEFINE_string("dataset", "SemEval", "SemEval/QNLI")
 tf.flags.DEFINE_string("mode", "pretrained", "pretrained/tranfer")
 # Training hyperparameter config
-tf.flags.DEFINE_integer("batch_size", 64, "batch size")
+tf.flags.DEFINE_integer("batch_size", 16, "batch size")
 tf.flags.DEFINE_integer("epochs", 160, "epochs")
 tf.flags.DEFINE_float("learning_rate", 1e-4, "learning rate")
 tf.flags.DEFINE_float("grad_clip", 5.0, "")
