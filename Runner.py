@@ -15,8 +15,8 @@ import json
 #enNLP = spacy.load("en")
 from tqdm import *
 from sklearn.metrics import accuracy_score
-# from bert_serving.client import BertClient
-# bc = BertClient()
+from bert_serving.client import BertClient
+bc = BertClient()
 
 tf.flags.DEFINE_string("dataset", "SemEval", "SemEval/QNLI")
 tf.flags.DEFINE_string("mode", "pretrained", "pretrained/tranfer")
