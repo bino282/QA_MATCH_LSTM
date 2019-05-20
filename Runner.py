@@ -40,7 +40,7 @@ tf.flags.DEFINE_integer("attn_unit", 350, "")
 tf.flags.DEFINE_integer("hop", 1, "")
 # word vector config
 tf.flags.DEFINE_string(
-    "embedding_path", "../local/word_vector/glove.6B.300d.txt", "word embedding path")
+    "embedding_path", "../local/word_vector/glove.840B.300d.txt", "word embedding path")
 tf.flags.DEFINE_boolean("use_char_embedding", True, "")
 tf.flags.DEFINE_integer("char_embedding_dim", 50, "")
 tf.flags.DEFINE_integer("char_pad", 15, "")
@@ -110,6 +110,7 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
     
     inp = make_model_inputs(qi, si, qi_char, si_char, q_l, s_l, q, sents, y)
+    print(inp['qi'])
     if iseval:
         return (inp, y)
     else:
