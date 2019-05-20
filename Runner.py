@@ -108,7 +108,6 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
     
     inp = make_model_inputs(qi, si, qi_char, si_char, q_l, s_l, q, sents, y)
-    print(inp['qi'])
     if iseval:
         return (inp, y)
     else:
@@ -250,8 +249,8 @@ if __name__ == "__main__":
         os.makedirs(checkpoint_dir)
     saver = tf.train.Saver(tf.global_variables(), max_to_keep=FLAGS.num_checkpoints)
     callback = DataUtils.AnsSelCB(inp_val['q'], inp_val['sents'], y_val, inp_val)
-    q_i_test = bc.encode(inp_val['qi'])
-    s_i_test = bc.encode(inp_val['si'])
+    q_i_test = bc.encode([" ".join(t) for t in inp_val['qi']])
+    s_i_test = bc.encode([" ".join(t) for t in inp_val['si']])
     test_data = [ q_i_test,
                   s_i_test,
                   inp_val['qi_char'],
@@ -277,8 +276,8 @@ if __name__ == "__main__":
         t = tqdm(range(0, len(y_train), FLAGS.batch_size), desc='train loss: %.6f' %0.0, ncols=100)
         train_loss = []
         for i in t:
-            q_i = bc.encode(inp_tr['qi'][i:i+FLAGS.batch_size])
-            s_i = bc.encode(inp_tr['si'][i:i+FLAGS.batch_size]) 
+            q_i = bc.encode([" ".join(t) for t in inp_tr['qi'][i:i+FLAGS.batch_size]])
+            s_i = bc.encode([" ".join(t) for t in inp_tr['si'][i:i+FLAGS.batch_size]])
             data_batch = [ q_i,
                            s_i,
                            inp_tr['qi_char'][i:i+FLAGS.batch_size],
