@@ -105,6 +105,7 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     q = [" ".join(t) for t in q]
     qi = bc.encode(q)
     print(qi.shape)
+    sents = [" ".join(t) for t in sents]
     si = bc.encode(sents)
     qi_char = char_vocab.vectorize(q, pad=char_pad, seq_pad=pad_question)
     si_char = char_vocab.vectorize(sents, pad=char_pad, seq_pad=pad_sentence)
