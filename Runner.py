@@ -155,12 +155,14 @@ def SNLI_train_step(sess, model, data_batch):
     return loss
 
 def train_step(sess, model, data_batch):
-    q_batch, s_batch, q_char_batch, s_char_batch, ql_batch, sl_batch, y_batch = data_batch
+    q_batch,q_embed_batch,s_batch,s_embed_batch,q_char_batch, s_char_batch, ql_batch, sl_batch, y_batch = data_batch
     feed_dict = {
         model.queries : q_batch,
+        model.queries_embed : q_embed_batch,
         model.queries_char : q_char_batch,
         #model.queries_length : ql_batch,
         model.hypothesis : s_batch,
+        model.hypothesis_embed : s_embed_batch,
         model.hypothesis_char : s_char_batch,
         #model.hypothesis_length : sl_batch,
         model.dropout : FLAGS.dropout,
