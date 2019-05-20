@@ -27,7 +27,7 @@ tf.flags.DEFINE_float("learning_rate", 1e-4, "learning rate")
 tf.flags.DEFINE_float("grad_clip", 5.0, "")
 # LSTM config
 tf.flags.DEFINE_integer("hidden_layer", 300, "")
-tf.flags.DEFINE_integer("pad_question", 100, "")
+tf.flags.DEFINE_integer("pad_question", 150, "")
 tf.flags.DEFINE_integer("pad_sentence", 150, "")
 tf.flags.DEFINE_float("dropout", 0.7, "")
 tf.flags.DEFINE_string("Ddim", "2", "")
