@@ -102,6 +102,7 @@ def load_set(fname, vocab=None, char_vocab=None, iseval=False):
     
     # qi = vocab.vectorize(q, pad=pad_question)  
     # si = vocab.vectorize(sents, pad=pad_sentence)
+    print(q)
     qi = bc.encode(q)
     print(qi)
     exit()
