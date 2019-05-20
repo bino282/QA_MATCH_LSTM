@@ -275,13 +275,13 @@ class MatchLSTM(object):
     def _add_placeholder(self):
         with tf.variable_scope("placeholder"):
             self.queries = tf.placeholder(
-                tf.int32, [None, self.config.pad_question,768], "queries")
+                tf.float32, [None, self.config.pad_question,768], "queries")
             self.queries_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_question, self.config.char_pad], "queries")
             # self.queries_length = tf.placeholder(
             #    tf.int32, [None], "queries_length")
             self.hypothesis = tf.placeholder(
-                tf.int32, [None, self.config.pad_sentence,768], "hypothesis")
+                tf.float32, [None, self.config.pad_sentence,768], "hypothesis")
             self.hypothesis_char = tf.placeholder(
                 tf.int32, [None, self.config.pad_sentence, self.config.char_pad], "queries")
             # self.hypothesis_length = tf.placeholder(
